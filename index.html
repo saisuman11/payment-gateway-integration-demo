@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Payment Gateway Demo</title>
+</head>
+<body>
+
+<h2>Payment Gateway Demo</h2>
+<button id="payBtn">Pay ₹500</button>
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+<script>
+document.getElementById("payBtn").onclick = async function () {
+
+  const order = await fetch("/create-order", {
+    method: "POST"
+  }).then(res => res.json());
+
+  const options = {
+    key: "PASTE_YOUR_TEST_KEY_ID_HERE",
+    amount: order.amount,
+    currency: order.currency,
+    order_id: order.id,
+    name: "Demo Project",
+    description: "Test Payment",
+    handler: function (response) {
+      alert("Payment Successful 🎉");
+      console.log(response);
+    },
+    theme: { color: "#3399cc" }
+  };
+
+  const rzp = new Razorpay(options);
+  rzp.open();
+};
+</script>
+
+</body>
+</html>
